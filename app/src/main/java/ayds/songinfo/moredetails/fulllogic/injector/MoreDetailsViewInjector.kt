@@ -1,4 +1,7 @@
 package ayds.songinfo.moredetails.fulllogic.injector
 
-class MoreDetailsViewInjector {
+object MoreDetailsViewInjector {
+    fun init(){
+        //TODO: IMPLEMENTAR FUNCION
+    }
 }

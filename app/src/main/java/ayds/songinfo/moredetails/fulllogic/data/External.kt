@@ -1,4 +1,5 @@
 package ayds.songinfo.moredetails.fulllogic.data
 
-class External {
+class External(){
+
 }

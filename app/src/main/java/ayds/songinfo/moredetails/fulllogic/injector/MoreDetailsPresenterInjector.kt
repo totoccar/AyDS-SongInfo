@@ -1,4 +1,8 @@
 package ayds.songinfo.moredetails.fulllogic.injector
 
-class MoreDetailsPresenterInjector {
+object MoreDetailsPresenterInjector {
+
+    fun init(){
+        //TODO: Implementar esta funcion
+    }
 }
