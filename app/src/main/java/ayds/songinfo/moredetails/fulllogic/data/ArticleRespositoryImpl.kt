@@ -8,7 +8,7 @@ class ArticleRespositoryImpl (
 
 ) : ArticleRepository{
 
-    override fun getARticle(artistName: String): Article? {
+    override fun getArticle(artistName: String): Article? {
         TODO("Not yet implemented")
     }
 }
