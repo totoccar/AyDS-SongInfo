@@ -21,7 +21,9 @@ import java.io.IOException
 import java.lang.Exception
 import java.util.Locale
 
-data class ArtistBiography(val artistName: String, val biography: String, val articleUrl: String)
+//YA MODULARIZADO
+/*data class ArtistBiography(val artistName: String, val biography: String, val articleUrl: String)
+ */
 
 class OtherInfoWindow : Activity() {
     private lateinit var articleTextView: TextView
@@ -36,32 +38,36 @@ class OtherInfoWindow : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
 
-        initViewProperties()
-        initArticleDatabase()
-        initLastFMAPI()
+      //  initViewProperties()
+        // initArticleDatabase()
+       // initLastFMAPI()
         getArtistInfoAsync()
     }
-
+    //YA MODULARIZADO
+    /*
     private fun initViewProperties() {
         articleTextView = findViewById(R.id.textPane1)
         openUrlButton = findViewById(R.id.openUrlButton)
         lastFMImageView = findViewById(R.id.lastFMImageView)
     }
+     */
+    /*
+        private fun initArticleDatabase() {
+            articleDatabase =
+                databaseBuilder(this, ArticleDatabase::class.java, ARTICLE_BD_NAME).build()
+        }
 
-    private fun initArticleDatabase() {
-        articleDatabase =
-            databaseBuilder(this, ArticleDatabase::class.java, ARTICLE_BD_NAME).build()
-    }
+        private fun initLastFMAPI() {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(LASTFM_BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build()
 
-    private fun initLastFMAPI() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(LASTFM_BASE_URL)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
+            lastFMAPI = retrofit.create(LastFMAPI::class.java)
+        }
 
-        lastFMAPI = retrofit.create(LastFMAPI::class.java)
-    }
-
+         */
+/*
     private fun getArtistInfoAsync() {
         Thread {
             getArtistInfo()
@@ -74,6 +80,7 @@ class OtherInfoWindow : Activity() {
 
         updateUi(artistBiography)
     }
+*/
 
     private fun getArtistInfoFromRepository(): ArtistBiography {
         val artistName = getArtistName()

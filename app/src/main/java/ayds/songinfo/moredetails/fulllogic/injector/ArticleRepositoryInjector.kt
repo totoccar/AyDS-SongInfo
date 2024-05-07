@@ -5,13 +5,14 @@ import androidx.room.Room
 import ayds.songinfo.moredetails.fulllogic.ArticleDatabase
 import ayds.songinfo.moredetails.fulllogic.LastFMAPI
 import ayds.songinfo.moredetails.fulllogic.OtherInfoWindow
+import ayds.songinfo.moredetails.fulllogic.domain.ArticleRepository
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 private  const val DB_NAME = "db-name"
 
 object ArticleRepositoryInjector {
-
+    lateinit var repository: ArticleRepository
     fun init(context: Context){
         val lastFMAPI = initFMAPI()
         val dataBase = initDataBase(context)
