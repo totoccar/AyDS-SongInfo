@@ -1,34 +1,46 @@
 package ayds.songinfo.moredetails.fulllogic.injector
-
 import android.content.Context
 import androidx.room.Room
-import ayds.songinfo.moredetails.fulllogic.ArticleDatabase
-import ayds.songinfo.moredetails.fulllogic.LastFMAPI
-import ayds.songinfo.moredetails.fulllogic.OtherInfoWindow
-import ayds.songinfo.moredetails.fulllogic.domain.ArticleRepository
+import ayds.songinfo.moredetails.fulllogic.data.OtherInfoRepositoryImpl
+import ayds.songinfo.moredetails.fulllogic.data.external.data.LastFMAPI
+import ayds.songinfo.moredetails.fulllogic.data.external.data.LastFMToArtistBiographyResolverImpl
+import ayds.songinfo.moredetails.fulllogic.data.external.data.OtherInfoServiceImpl
+import ayds.songinfo.moredetails.fulllogic.data.local.data.ArticleDatabase
+import ayds.songinfo.moredetails.fulllogic.data.local.data.OtherInfoLocalStorageImpl
+import ayds.songinfo.moredetails.fulllogic.presentation.ArtistBiographyDescriptionHelper
+import ayds.songinfo.moredetails.fulllogic.presentation.ArtistBiographyDescriptionHelperImpl
+import ayds.songinfo.moredetails.fulllogic.presentation.OtherInfoPresenter
+import ayds.songinfo.moredetails.fulllogic.presentation.OtherInfoPresenterImpl
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
-private  const val DB_NAME = "db-name"
 
-object ArticleRepositoryInjector {
-    lateinit var repository: ArticleRepository
-    fun init(context: Context){
-        val lastFMAPI = initFMAPI()
-        val dataBase = initDataBase(context)
-    }
+private const val ARTICLE_BD_NAME = "database-article"
+private const val LASTFM_BASE_URL = "https://ws.audioscrobbler.com/2.0/"
 
+object OtherInfoInjector {
 
-    private fun initFMAPI(): LastFMAPI {
+    lateinit var presenter: OtherInfoPresenter
+
+    fun initGraph(context: Context) {
+
+        val articleDatabase =
+            Room.databaseBuilder(context, ArticleDatabase::class.java, ARTICLE_BD_NAME).build()
+
         val retrofit = Retrofit.Builder()
-            .baseUrl(OtherInfoWindow.LASTFM_BASE_URL)
+            .baseUrl(LASTFM_BASE_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
+        val lastFMAPI = retrofit.create(LastFMAPI::class.java)
 
-        return retrofit.create(LastFMAPI::class.java)
+        val lastFMToArtistBiographyResolver = LastFMToArtistBiographyResolverImpl()
+        val otherInfoService = OtherInfoServiceImpl(lastFMAPI, lastFMToArtistBiographyResolver)
+        val articleLocalStorage = OtherInfoLocalStorageImpl(articleDatabase)
+
+        val repository = OtherInfoRepositoryImpl(articleLocalStorage, otherInfoService)
+
+        val artistBiographyDescriptionHelper = ArtistBiographyDescriptionHelperImpl()
+
+        presenter = OtherInfoPresenterImpl(repository, artistBiographyDescriptionHelper)
     }
-
-    private fun initDataBase(context: Context) =
-            Room.databaseBuilder(context, ArticleDatabase::class.java, DB_NAME)
-                .build()
 }

@@ -21,6 +21,7 @@ import ayds.songinfo.home.view.HomeUiState.Companion.DEFAULT_IMAGE
 import ayds.songinfo.utils.UtilsInjector
 import ayds.songinfo.utils.navigation.NavigationUtils
 import ayds.songinfo.utils.view.ImageLoader
+import ayds.songinfo.moredetails.fulllogic.presentation.OtherInfoActivity
 
 interface HomeView {
     val uiEventObservable: Observable<HomeUiEvent>
@@ -48,10 +49,12 @@ class HomeViewActivity : Activity(), HomeView {
     override val uiEventObservable: Observable<HomeUiEvent> = onActionSubject
     override var uiState: HomeUiState = HomeUiState()
 
+
     override fun navigateToOtherDetails(artistName: String) {
-        val intent = Intent(this, ayds.songinfo.moredetails.fulllogic.OtherInfoWindow::class.java)
-        intent.putExtra(ayds.songinfo.moredetails.fulllogic.OtherInfoWindow.ARTIST_NAME_EXTRA, artistName)
-        startActivity(intent)
+            val intent = Intent(this, OtherInfoActivity::class.java)
+            intent.putExtra(OtherInfoActivity.ARTIST_NAME_EXTRA, artistName)
+            startActivity(intent)
+
     }
 
     override fun openExternalLink(url: String) {
