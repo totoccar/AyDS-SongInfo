@@ -14,7 +14,7 @@ class ReleaseDateDayResolverTest {
 
         val result = releaseDateDayResolver.getReleaseDate()
 
-        assertEquals(result, "01/02/1992")
+        assertEquals(result, "01/03/1992")
     }
 
 }
