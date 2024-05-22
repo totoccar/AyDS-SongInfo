@@ -3,65 +3,54 @@ package ayds.songinfo.moredetails.fulllogic.data
 import ayds.songinfo.moredetails.fulllogic.data.external.data.OtherInfoService
 import ayds.songinfo.moredetails.fulllogic.data.local.data.OtherInfoLocalStorage
 import ayds.songinfo.moredetails.fulllogic.domain.ArtistBiography
+import ayds.songinfo.moredetails.fulllogic.domain.OtherInfoRepository
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import io.mockk.verify
+import org.junit.Assert
 import org.junit.Test
 
-class OtherInfoRepositoryImplTest {
+class OtherInfoRepositoryTest {
+
+    private val otherInfoLocalStorage: OtherInfoLocalStorage = mockk()
+    private val otherInfoService: OtherInfoService = mockk()
+    private val otherInfoRepository: OtherInfoRepository = OtherInfoRepositoryImpl(otherInfoLocalStorage, otherInfoService)
 
     @Test
-    fun `getArtistInfo with existing local article`() {
-        val expectedResult= ArtistBiography("Artist", "Local Bio", "local-url", false)
-        val otherInfoLocalStorage = mockk<OtherInfoLocalStorage> {
-            every { getArticle(any()) } returns expectedResult
-        }
-        val otherInfoService = mockk<OtherInfoService>()
+    fun `on getArtistInfo call getArticle from local storage`() {
+        val artistBiography = ArtistBiography("artist", "biography", "url", false)
+        every { otherInfoLocalStorage.getArticle("artist") } returns artistBiography
 
-        val repository = OtherInfoRepositoryImpl(otherInfoLocalStorage, otherInfoService)
+        val result = otherInfoRepository.getArtistInfo("artist")
 
-        val artistInfo = repository.getArtistInfo("Artist")
-
-        expectedResult.isLocallyStored= true
-        assertEquals(expectedResult, artistInfo)
-        assertEquals(true, artistInfo.isLocallyStored)
+        Assert.assertEquals(artistBiography, result)
+        Assert.assertTrue(result.isLocallyStored)
     }
 
     @Test
-    fun `getArtistInfo with non-existing local article`() {
-        val otherInfoLocalStorage = mockk<OtherInfoLocalStorage> {
-            every { getArticle(any()) } returns null
-        }
-        val otherInfoService = mockk<OtherInfoService> {
-            every { getArticle(any()) } answers {
-                val artistName = firstArg<String>()
-                ArtistBiography(artistName, "Remote Bio", "remote-url", true)
-            }
-        }
+    fun `on getArtistInfo call getArticle from service`() {
+        val artistBiography = ArtistBiography("artist", "biography", "url", false)
+        every { otherInfoLocalStorage.getArticle("artist") } returns null
+        every { otherInfoService.getArticle("artist") } returns artistBiography
+        every { otherInfoLocalStorage.insertArtist(artistBiography) } returns Unit
 
-        val repository = OtherInfoRepositoryImpl(otherInfoLocalStorage, otherInfoService)
+        val result = otherInfoRepository.getArtistInfo("artist")
 
-        val artistInfo = repository.getArtistInfo("Artist")
-
-        assertEquals("Remote Bio", artistInfo.biography)
-        assertEquals(false, artistInfo.isLocallyStored)
+        Assert.assertEquals(artistBiography, result)
+        Assert.assertFalse(result.isLocallyStored)
+        verify { otherInfoLocalStorage.insertArtist(artistBiography) }
     }
 
     @Test
-    fun `getArtistInfo with empty biography`() {
-        val otherInfoLocalStorage = mockk<OtherInfoLocalStorage> {
-            every { getArticle(any()) } returns null
-        }
-        val otherInfoService = mockk<OtherInfoService> {
-            every { getArticle(any()) } returns ArtistBiography("Artist", "", "empty-url", false)
-        }
+    fun `on empty bio, getArtistInfo call getArticle from service`() {
+        val artistBiography = ArtistBiography("artist", "", "url", false)
+        every { otherInfoLocalStorage.getArticle("artist") } returns null
+        every { otherInfoService.getArticle("artist") } returns artistBiography
 
-        val repository = OtherInfoRepositoryImpl(otherInfoLocalStorage, otherInfoService)
+        val result = otherInfoRepository.getArtistInfo("artist")
 
-        val artistInfo = repository.getArtistInfo("Artist")
-
-        assertEquals("", artistInfo.biography)
-        assertEquals(false, artistInfo.isLocallyStored)
+        Assert.assertEquals(artistBiography, result)
+        Assert.assertFalse(result.isLocallyStored)
+        verify(inverse = true) { otherInfoLocalStorage.insertArtist(artistBiography) }
     }
 }
