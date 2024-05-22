@@ -1,4 +1,4 @@
-package ayds.songinfo.moredetails.fulllogic.domain
+package ayds.artist.external.lastfm.data
 
 data class ArtistBiography
     (val artistName: String,

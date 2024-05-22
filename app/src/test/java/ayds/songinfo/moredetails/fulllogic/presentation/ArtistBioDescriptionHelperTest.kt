@@ -1,4 +1,4 @@
-import ayds.songinfo.moredetails.fulllogic.domain.ArtistBiography
+import ayds.artist.external.lastfm.data.ArtistBiography
 import ayds.songinfo.moredetails.fulllogic.presentation.ArtistBiographyDescriptionHelper
 import ayds.songinfo.moredetails.fulllogic.presentation.ArtistBiographyDescriptionHelperImpl
 import org.junit.Assert
@@ -12,7 +12,8 @@ class ArtistBioDescriptionHelperTest {
 
     @Test
     fun `on local stored artist should return biography`() {
-        val artistBiography = ArtistBiography("artist", "biography", "url", true)
+        val artistBiography =
+            ayds.artist.external.lastfm.data.ArtistBiography("artist", "biography", "url", true)
 
         val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
 
@@ -24,7 +25,8 @@ class ArtistBioDescriptionHelperTest {
 
     @Test
     fun `on no local stored artist should return biography`() {
-        val artistBiography = ArtistBiography("artist", "biography", "url", false)
+        val artistBiography =
+            ayds.artist.external.lastfm.data.ArtistBiography("artist", "biography", "url", false)
 
         val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
 
@@ -35,7 +37,8 @@ class ArtistBioDescriptionHelperTest {
     }
     @Test
     fun `should remove apostrophes`() {
-        val artistBiography = ArtistBiography("artist", "biography'n", "url", false)
+        val artistBiography =
+            ayds.artist.external.lastfm.data.ArtistBiography("artist", "biography'n", "url", false)
 
         val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
 
@@ -47,7 +50,8 @@ class ArtistBioDescriptionHelperTest {
 
     @Test
     fun `should fix on double slash`() {
-        val artistBiography = ArtistBiography("artist", "biography\\n", "url", false)
+        val artistBiography =
+            ayds.artist.external.lastfm.data.ArtistBiography("artist", "biography\\n", "url", false)
 
         val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
 
@@ -59,7 +63,8 @@ class ArtistBioDescriptionHelperTest {
 
     @Test
     fun `should map break lines`() {
-        val artistBiography = ArtistBiography("artist", "biography\n", "url", false)
+        val artistBiography =
+            ayds.artist.external.lastfm.data.ArtistBiography("artist", "biography\n", "url", false)
 
         val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
 
@@ -70,7 +75,12 @@ class ArtistBioDescriptionHelperTest {
     }
     @Test
     fun `should set artist name bold`() {
-        val artistBiography = ArtistBiography("artist", "biography artist", "url", false)
+        val artistBiography = ayds.artist.external.lastfm.data.ArtistBiography(
+            "artist",
+            "biography artist",
+            "url",
+            false
+        )
 
         val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
 

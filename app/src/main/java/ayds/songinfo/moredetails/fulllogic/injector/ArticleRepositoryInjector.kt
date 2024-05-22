@@ -2,12 +2,11 @@ package ayds.songinfo.moredetails.fulllogic.injector
 import android.content.Context
 import androidx.room.Room
 import ayds.songinfo.moredetails.fulllogic.data.OtherInfoRepositoryImpl
-import ayds.songinfo.moredetails.fulllogic.data.external.data.LastFMAPI
-import ayds.songinfo.moredetails.fulllogic.data.external.data.LastFMToArtistBiographyResolverImpl
-import ayds.songinfo.moredetails.fulllogic.data.external.data.OtherInfoServiceImpl
+import ayds.artist.external.lastfm.data.LastFMAPI
+import ayds.artist.external.lastfm.data.LastFMToArtistBiographyResolverImpl
+import ayds.artist.external.lastfm.data.OtherInfoServiceImpl
 import ayds.songinfo.moredetails.fulllogic.data.local.data.ArticleDatabase
 import ayds.songinfo.moredetails.fulllogic.data.local.data.OtherInfoLocalStorageImpl
-import ayds.songinfo.moredetails.fulllogic.presentation.ArtistBiographyDescriptionHelper
 import ayds.songinfo.moredetails.fulllogic.presentation.ArtistBiographyDescriptionHelperImpl
 import ayds.songinfo.moredetails.fulllogic.presentation.OtherInfoPresenter
 import ayds.songinfo.moredetails.fulllogic.presentation.OtherInfoPresenterImpl
@@ -31,10 +30,14 @@ object OtherInfoInjector {
             .baseUrl(LASTFM_BASE_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        val lastFMAPI = retrofit.create(LastFMAPI::class.java)
+        val lastFMAPI = retrofit.create(ayds.artist.external.lastfm.data.LastFMAPI::class.java)
 
-        val lastFMToArtistBiographyResolver = LastFMToArtistBiographyResolverImpl()
-        val otherInfoService = OtherInfoServiceImpl(lastFMAPI, lastFMToArtistBiographyResolver)
+        val lastFMToArtistBiographyResolver =
+            ayds.artist.external.lastfm.data.LastFMToArtistBiographyResolverImpl()
+        val otherInfoService = ayds.artist.external.lastfm.data.OtherInfoServiceImpl(
+            lastFMAPI,
+            lastFMToArtistBiographyResolver
+        )
         val articleLocalStorage = OtherInfoLocalStorageImpl(articleDatabase)
 
         val repository = OtherInfoRepositoryImpl(articleLocalStorage, otherInfoService)

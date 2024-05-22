@@ -1,18 +1,18 @@
 package ayds.songinfo.moredetails.fulllogic.data
-import ayds.songinfo.moredetails.fulllogic.data.external.data.OtherInfoService
+import ayds.artist.external.lastfm.data.OtherInfoService
 import ayds.songinfo.moredetails.fulllogic.data.local.data.OtherInfoLocalStorage
-import ayds.songinfo.moredetails.fulllogic.domain.ArtistBiography
+import ayds.artist.external.lastfm.data.ArtistBiography
 import ayds.songinfo.moredetails.fulllogic.domain.OtherInfoRepository
 
 internal class OtherInfoRepositoryImpl(
     private val otherInfoLocalStorage: OtherInfoLocalStorage,
-    private val otherInfoService: OtherInfoService,
+    private val otherInfoService: ayds.artist.external.lastfm.data.OtherInfoService,
 ) : OtherInfoRepository {
 
     override fun getArtistInfo(artistName: String): ArtistBiography {
         val dbArticle = otherInfoLocalStorage.getArticle(artistName)
 
-        val artistBiography: ArtistBiography
+        val artistBiography: ayds.artist.external.lastfm.data.ArtistBiography
 
         if (dbArticle != null) {
             artistBiography = dbArticle.apply { markItAsLocal() }
@@ -25,7 +25,7 @@ internal class OtherInfoRepositoryImpl(
         return artistBiography
     }
 
-    private fun ArtistBiography.markItAsLocal() {
+    private fun ayds.artist.external.lastfm.data.ArtistBiography.markItAsLocal() {
         isLocallyStored = true
     }
 }

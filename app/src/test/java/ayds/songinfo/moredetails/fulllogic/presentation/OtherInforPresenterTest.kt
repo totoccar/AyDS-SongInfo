@@ -1,4 +1,4 @@
-import ayds.songinfo.moredetails.fulllogic.domain.ArtistBiography
+import ayds.artist.external.lastfm.data.ArtistBiography
 import ayds.songinfo.moredetails.fulllogic.domain.OtherInfoRepository
 import ayds.songinfo.moredetails.fulllogic.presentation.ArtistBiographyDescriptionHelper
 import ayds.songinfo.moredetails.fulllogic.presentation.ArtistBiographyUiState
@@ -18,7 +18,11 @@ class OtherInfoPresenterTest {
 
     @Test
     fun `getArtistInfo should return artist biography ui state`() {
-        val artistBiography = ArtistBiography("artistName", "biography", "articleUrl")
+        val artistBiography = ayds.artist.external.lastfm.data.ArtistBiography(
+            "artistName",
+            "biography",
+            "articleUrl"
+        )
         every { otherInfoRepository.getArtistInfo("artistName") } returns artistBiography
         every { artistBiographyDescriptionHelper.getDescription(artistBiography) } returns "description"
         val artistBiographyTester: (ArtistBiographyUiState) -> Unit = mockk(relaxed = true)
