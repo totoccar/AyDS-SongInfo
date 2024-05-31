@@ -1,4 +1,3 @@
-import ayds.artist.external.lastfm.data.ArtistBiography
 import ayds.songinfo.moredetails.fulllogic.presentation.ArtistBiographyDescriptionHelper
 import ayds.songinfo.moredetails.fulllogic.presentation.ArtistBiographyDescriptionHelperImpl
 import org.junit.Assert
@@ -12,10 +11,10 @@ class ArtistBioDescriptionHelperTest {
 
     @Test
     fun `on local stored artist should return biography`() {
-        val artistBiography =
-            ayds.artist.external.lastfm.data.ArtistBiography("artist", "biography", "url", true)
+        val lastFmBiography =
+            ayds.artist.external.lastfm.data.LastFmBiography("artist", "biography", "url", true)
 
-        val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
+        val result = artistBiographyDescriptionHelper.getDescription(lastFmBiography)
 
         Assert.assertEquals(
             "<html><div width=400><font face=\"arial\">[*]biography</font></div></html>",
@@ -25,10 +24,10 @@ class ArtistBioDescriptionHelperTest {
 
     @Test
     fun `on no local stored artist should return biography`() {
-        val artistBiography =
-            ayds.artist.external.lastfm.data.ArtistBiography("artist", "biography", "url", false)
+        val lastFmBiography =
+            ayds.artist.external.lastfm.data.LastFmBiography("artist", "biography", "url", false)
 
-        val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
+        val result = artistBiographyDescriptionHelper.getDescription(lastFmBiography)
 
         Assert.assertEquals(
             "<html><div width=400><font face=\"arial\">biography</font></div></html>",
@@ -37,10 +36,10 @@ class ArtistBioDescriptionHelperTest {
     }
     @Test
     fun `should remove apostrophes`() {
-        val artistBiography =
-            ayds.artist.external.lastfm.data.ArtistBiography("artist", "biography'n", "url", false)
+        val lastFmBiography =
+            ayds.artist.external.lastfm.data.LastFmBiography("artist", "biography'n", "url", false)
 
-        val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
+        val result = artistBiographyDescriptionHelper.getDescription(lastFmBiography)
 
         Assert.assertEquals(
             "<html><div width=400><font face=\"arial\">biography n</font></div></html>",
@@ -50,10 +49,10 @@ class ArtistBioDescriptionHelperTest {
 
     @Test
     fun `should fix on double slash`() {
-        val artistBiography =
-            ayds.artist.external.lastfm.data.ArtistBiography("artist", "biography\\n", "url", false)
+        val lastFmBiography =
+            ayds.artist.external.lastfm.data.LastFmBiography("artist", "biography\\n", "url", false)
 
-        val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
+        val result = artistBiographyDescriptionHelper.getDescription(lastFmBiography)
 
         Assert.assertEquals(
             "<html><div width=400><font face=\"arial\">biography<br></font></div></html>",
@@ -63,10 +62,10 @@ class ArtistBioDescriptionHelperTest {
 
     @Test
     fun `should map break lines`() {
-        val artistBiography =
-            ayds.artist.external.lastfm.data.ArtistBiography("artist", "biography\n", "url", false)
+        val lastFmBiography =
+            ayds.artist.external.lastfm.data.LastFmBiography("artist", "biography\n", "url", false)
 
-        val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
+        val result = artistBiographyDescriptionHelper.getDescription(lastFmBiography)
 
         Assert.assertEquals(
             "<html><div width=400><font face=\"arial\">biography<br></font></div></html>",
@@ -75,14 +74,14 @@ class ArtistBioDescriptionHelperTest {
     }
     @Test
     fun `should set artist name bold`() {
-        val artistBiography = ayds.artist.external.lastfm.data.ArtistBiography(
+        val lastFmBiography = ayds.artist.external.lastfm.data.LastFmBiography(
             "artist",
             "biography artist",
             "url",
             false
         )
 
-        val result = artistBiographyDescriptionHelper.getDescription(artistBiography)
+        val result = artistBiographyDescriptionHelper.getDescription(lastFmBiography)
 
         Assert.assertEquals(
             "<html><div width=400><font face=\"arial\">biography <b>ARTIST</b></font></div></html>",

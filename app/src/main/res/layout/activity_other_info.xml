@@ -20,14 +20,14 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/lastFMImageView"
+                android:id="@+id/sourceImage1ImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:paddingTop="24dp"/>
 
             <TextView
-                android:id="@+id/textPane1"
+                android:id="@+id/cardContent1TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
@@ -35,7 +35,7 @@
                 android:padding="16dp" />
 
             <Button
-                android:id="@+id/openUrlButton"
+                android:id="@+id/openUrl1Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
